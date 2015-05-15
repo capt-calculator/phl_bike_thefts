@@ -3,7 +3,7 @@ library(data.table)
 
 thefts_link_1 = 'https://raw.githubusercontent.com/CityOfPhiladelphia/phl-open-geodata/master/bicycle_thefts/bicycle_thefts_Part1.csv'
 thefts_link_2 = 'https://raw.githubusercontent.com/CityOfPhiladelphia/phl-open-geodata/master/bicycle_thefts/Bike_Thefts_Part2.csv'
-weather = read.csv('C:\\users\\zne35671\\dropbox\\datascience\\bikethefts\\weather.csv')
+weather = read.csv('weather.csv')
 
 thefts_1 = read.csv(url(thefts_link_1))
 thefts_2 = read.csv(url(thefts_link_2))
