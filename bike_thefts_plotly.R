@@ -1,19 +1,12 @@
 library(plotly)
 library(data.table)
 
-thefts_link_1 = 'https://raw.githubusercontent.com/CityOfPhiladelphia/phl-open-geodata/master/bicycle_thefts/bicycle_thefts_Part1.csv'
-thefts_link_2 = 'https://raw.githubusercontent.com/CityOfPhiladelphia/phl-open-geodata/master/bicycle_thefts/Bike_Thefts_Part2.csv'
+thefts_link = 'https://raw.githubusercontent.com/CityOfPhiladelphia/phl-open-geodata/master/bicycle_thefts/bicycle_thefts_Part1.csv'
+
 weather = read.csv('weather.csv')
 
-thefts_1 = read.csv(url(thefts_link_1))
-thefts_2 = read.csv(url(thefts_link_2))
+thefts = read.csv(url(thefts_link))
 
-#combine theft data sets using columns in common
-inter = intersect(colnames(thefts_1), colnames(thefts_2))
-thefts_1 = thefts_1[inter]
-thefts_2 = thefts_2[inter]
-
-thefts = rbind(thefts_1, thefts_2)
 
 #rename THEFT_DATE column in thefts in preparation for a join with the weather data
 colnames(thefts)[4] = 'DATE'
@@ -24,8 +17,8 @@ weather$DATE = paste(weather$MO, weather$DAY, weather$YEAR, sep="/")
 #merge thefts with the weather data
 data = merge(thefts, weather, by='DATE')
 
-data$counts = 1
 data$TEMP = (data$HIGH + data$LOW) / 2
+data$counts = 1
 
 data = data.table(data)
 
@@ -45,21 +38,21 @@ trace1 = list(
   marker = list(
     color = 'rgb(0, 204, 102)',
     size=10
-    )
   )
+)
 
 plot_data = list(trace1)
 
 layout = list(
-  title = 'Philadelphia Bike Thefts by Temperature (2010-2014)',
+  title = 'Philadelphia Bike Thefts by Temperature (2010-2013)',
   
   xaxis = list(
     title = 'Daily Temperature'
-    ),
+  ),
   
   yaxis = list(
     title='Thefts'
-    ),
+  ),
   
   annotations = list(
     list(
@@ -69,9 +62,9 @@ layout = list(
       yref = "paper", 
       text = "Source: OpenDataPhilly", 
       showarrow = FALSE
-      )
     )
   )
+)
 
 response = py$plotly(plot_data, kwargs=list(filename='ph_bike_thefts', layout=layout, fileopt='overwrite'))
 
